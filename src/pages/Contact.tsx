@@ -60,7 +60,7 @@ const Contact = () => {
         </div>
 
         {/* Contact Form */}
-        <Card className="p-8">
+        <Card className="p-8 mb-8">
           {submitted && (
             <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
               ✓ Mensagem enviada com sucesso! Entraremos em contato em breve.
@@ -123,7 +123,7 @@ const Contact = () => {
         </Card>
 
         {/* Info */}
-        <Card className="p-8 mt-8 bg-muted">
+        <Card className="p-8 bg-muted">
           <h2 className="text-2xl font-bold text-primary mb-4">Outras Formas de Contato</h2>
           <div className="space-y-3 text-muted-foreground">
             <p><strong>Email:</strong> luizgustavo66101@gmail.com</p>

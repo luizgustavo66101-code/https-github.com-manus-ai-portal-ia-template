@@ -5,8 +5,7 @@ import { Link } from 'wouter';
 
 const Home = () => {
   useEffect(() => {
-    // Initialize homepage
-    console.log('Home page loaded');
+    document.title = 'Portal IA 2025 - O Futuro da Inteligência Artificial';
   }, []);
 
   return (
