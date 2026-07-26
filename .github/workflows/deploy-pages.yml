@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -31,6 +33,18 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Commit package-lock.json (if created)
+        if: exists('package-lock.json')
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json || true
+          git commit -m "chore: add package-lock.json" || echo "no changes to commit"
+          git push origin HEAD:$BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: npm run build
@@ -46,3 +60,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Update DEPLOYMENT_STATUS.md
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          PAGE_URL="${{ steps.deployment.outputs.page_url }}"
+          echo "# Deployment status" > DEPLOYMENT_STATUS.md
+          echo "" >> DEPLOYMENT_STATUS.md
+          echo "- timestamp: $TIMESTAMP" >> DEPLOYMENT_STATUS.md
+          echo "- status: $STATUS" >> DEPLOYMENT_STATUS.md
+          echo "- pages_url: $PAGE_URL" >> DEPLOYMENT_STATUS.md
+          echo "- run_url: $RUN_URL" >> DEPLOYMENT_STATUS.md
+          BRANCH=${GITHUB_REF#refs/heads/}
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add DEPLOYMENT_STATUS.md || true
+          git commit -m "chore: update DEPLOYMENT_STATUS.md: $STATUS at $TIMESTAMP" || echo "no changes to commit"
+          git push origin HEAD:$BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
