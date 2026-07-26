@@ -1,21 +1,20 @@
 {
-  "name": "portal-ia-2025",
+  "name": "https-github.com-manus-ai-portal-ia-template",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.0",
   "type": "module",
   "description": "Portal IA 2025 - O Futuro da Inteligência Artificial",
   "author": "Gustavo",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "tsc"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "wouter": "^3.0.1",
-    "drizzle-orm": "^0.30.0",
+    "drizzle-orm": "^0.30.8",
     "mysql2": "^3.6.5",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
@@ -27,9 +26,5 @@
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.8"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
   }
 }
