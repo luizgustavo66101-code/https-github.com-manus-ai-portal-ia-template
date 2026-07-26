@@ -18,6 +18,7 @@ jobs:
   deploy:
     permissions:
       contents: write
+      pull-requests: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -76,11 +77,15 @@ jobs:
           echo "- status: $STATUS" >> DEPLOYMENT_STATUS.md
           echo "- pages_url: $PAGE_URL" >> DEPLOYMENT_STATUS.md
           echo "- run_url: $RUN_URL" >> DEPLOYMENT_STATUS.md
-          BRANCH=${GITHUB_REF#refs/heads/}
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add DEPLOYMENT_STATUS.md || true
-          git commit -m "chore: update DEPLOYMENT_STATUS.md: $STATUS at $TIMESTAMP" || echo "no changes to commit"
-          git push origin HEAD:$BRANCH
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create Pull Request with deployment changes
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: chore(pages): update deployment artifacts
+          branch: automation/deploy-${{ github.run_id }}
+          title: chore(pages): update deployment artifacts (run ${{ github.run_id }})
+          body: |
+            This PR was created automatically by the Pages deploy workflow. It contains any updated artifacts such as package-lock.json and DEPLOYMENT_STATUS.md.
+          base: main
+          labels: automated, deployment
