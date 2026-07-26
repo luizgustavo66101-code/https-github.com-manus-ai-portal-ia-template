@@ -4,6 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/https-github.com-manus-ai-portal-ia-template/',
   plugins: [react()],
   resolve: {
     alias: {
