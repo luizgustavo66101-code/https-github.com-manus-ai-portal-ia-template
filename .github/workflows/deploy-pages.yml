@@ -1,4 +1,4 @@
-# .github/workflows/pages-deploy.yml
+# .github/workflows/deploy-pages.yml
 name: Deploy static content to Pages
 
 on:
@@ -33,5 +33,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-
-       
